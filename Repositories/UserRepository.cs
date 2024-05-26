@@ -1,19 +1,25 @@
-﻿using EscolaApi.Models;
-using EscolaApi.Repositories.Interfaces;
+﻿using EscolaApi.Data.Contexts;
+using EscolaApi.Data.Repositories;
+using EscolaApi.Domain.Models;
+using EscolaApi.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace EscolaApi.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(AppDbContext context) : BaseRepository(context), IUserRepository
     {
-        public User? GetUser(string username, string password)
+        public async Task<Usuario> GetUsuario(string login)
         {
-            var users = new List<User>
-            {
-                new() { Id = 1, Username = "batman", Password = "batman", Role = "manager" },
-                new() { Id = 2, Username = "robin", Password = "robin", Role = "employee" }
-            };
-            return users.FirstOrDefault( x => String.Equals(x.Username.ToLower(), username.ToLower())
-                                            && String.Equals(x.Password.ToLower(), password.ToLower()));
+            Usuario? result = await _context.Usuarios
+                 .Where(x => x.Login == login)
+                 .FirstOrDefaultAsync();
+
+            return result == null ? throw new Exception("Usuário não encontrado") : result;
+        }
+
+        public async Task CreateUsuario(Usuario usuario)
+        {
+            await _context.Usuarios.AddAsync(usuario);
         }
     }
 }

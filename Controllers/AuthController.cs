@@ -1,5 +1,6 @@
-﻿using EscolaApi.Models;
-using EscolaApi.Services.Interfaces;
+﻿using EscolaApi.Domain.Dtos;
+using EscolaApi.Domain.Services;
+using EscolaApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EscolaApi.Controllers
@@ -7,9 +8,9 @@ namespace EscolaApi.Controllers
     [Route("/api/[controller]")]
     public class AuthController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IUsuarioService _userService;
 
-        public AuthController(IUserService userService)
+        public AuthController(IUsuarioService userService)
         {
             _userService = userService;
         }
@@ -17,16 +18,33 @@ namespace EscolaApi.Controllers
         [HttpPost("/login")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<IActionResult> Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            string token = await _userService.Login(user.Username, user.Password);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetErrorMessages());
 
-            if(token == "") 
-            {
-                return Unauthorized("Não autorizado");
-            }
+            var result = await _userService.Login(loginDto.Login, loginDto.Senha);
 
-            return Ok(token);
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            return Ok(result.Resource);
+        }
+
+        [HttpPost("/cadastro")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> Cadastrar([FromBody] CadastroDto cadastroDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetErrorMessages());
+
+            var result = await _userService.Cadastrar(cadastroDto);
+
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            return Created(result.Message, result.Resource);
         }
     }
 }

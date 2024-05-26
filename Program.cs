@@ -1,4 +1,5 @@
 using EscolaApi.Data.Contexts;
+using EscolaApi.Data.Repositories;
 using EscolaApi.Domain.Repositories;
 using EscolaApi.Domain.Services;
 using EscolaApi.Repositories;
@@ -15,11 +16,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Injeções de dependência
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddAuthentication( x =>
+
+builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
