@@ -26,7 +26,7 @@ namespace EscolaApi.Controllers
             var result = await _userService.Login(loginDto.Login, loginDto.Senha);
 
             if (!result.Success)
-                return BadRequest(result.Message);
+                return Unauthorized(result.Message);
 
             return Ok(result.Resource);
         }
