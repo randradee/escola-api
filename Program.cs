@@ -1,8 +1,10 @@
+using EscolaApi.Data.Contexts;
+using EscolaApi.Domain.Repositories;
+using EscolaApi.Domain.Services;
 using EscolaApi.Repositories;
-using EscolaApi.Repositories.Interfaces;
 using EscolaApi.Services;
-using EscolaApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,12 @@ builder.Services.AddAuthentication( x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+});
+
+// config do banco
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("escolaApiDb"));
 });
 
 var app = builder.Build();
