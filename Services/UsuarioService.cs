@@ -16,13 +16,18 @@ namespace EscolaApi.Services
 
         public async Task<Response<LoginResponseDto>> Login(string login, string senha)
         {
-            Usuario user = await _userRepository.GetUsuario(login);
+            Usuario usuario = await _userRepository.GetUsuario(login);
 
             try
             {
-                string token = await _tokenService.GenerateToken(user);
+                if(string.Equals(usuario.Login, login, StringComparison.CurrentCultureIgnoreCase) && string.Equals(usuario.Senha, senha, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    string token = await _tokenService.GenerateToken(usuario);
 
-                return new Response<LoginResponseDto>(new LoginResponseDto(login, token));
+                    return new Response<LoginResponseDto>(new LoginResponseDto(login, token));
+                }
+
+                return new Response<LoginResponseDto>("Usuário ou senha incorreto(s)");
             }
             catch (Exception ex)
             {

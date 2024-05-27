@@ -1,5 +1,4 @@
-﻿using EscolaApi.Config;
-using EscolaApi.Domain.Models;
+﻿using EscolaApi.Domain.Models;
 using EscolaApi.Domain.Services;
 using EscolaApi.Extensions;
 using Microsoft.IdentityModel.Tokens;
@@ -9,12 +8,13 @@ using System.Text;
 
 namespace EscolaApi.Services
 {
-    public class TokenService : ITokenService
+    public class TokenService(IConfiguration configuration) : ITokenService
     {
+        private readonly IConfiguration _configuration = configuration;
         public Task<string> GenerateToken(Usuario user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Settings.JwtSecret);
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
