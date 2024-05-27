@@ -3,20 +3,17 @@ using System;
 using EscolaApi.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace EscolaApi.Migrations
+namespace EscolaApi.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240526205207_CreateTableUsuarios")]
-    partial class CreateTableUsuarios
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,13 +28,20 @@ namespace EscolaApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Cargo")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Login")
+                    b.Property<string>("Cargo")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Senha")
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SenhaHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SenhaSalt")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

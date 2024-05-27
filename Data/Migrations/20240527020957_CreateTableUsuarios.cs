@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace EscolaApi.Migrations
+namespace EscolaApi.Data.Migrations
 {
     /// <inheritdoc />
     public partial class CreateTableUsuarios : Migration
@@ -15,9 +16,10 @@ namespace EscolaApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Login = table.Column<string>(type: "text", nullable: true),
-                    Senha = table.Column<string>(type: "text", nullable: true),
-                    Cargo = table.Column<int>(type: "integer", nullable: false)
+                    Login = table.Column<string>(type: "text", nullable: false),
+                    SenhaHash = table.Column<string>(type: "text", nullable: false),
+                    SenhaSalt = table.Column<string>(type: "text", nullable: false),
+                    Cargo = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

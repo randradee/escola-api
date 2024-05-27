@@ -5,8 +5,8 @@ namespace EscolaApi.Domain.Services
 {
     public interface IUsuarioService
     {
-        Task<Response<LoginResponseDto>> Login(string login, string senha);
+        Task<Response<UsuarioDto>> Login(LoginDto usuario, CancellationToken cancellationToken);
 
-        Task<Response<CadastroDto>> Cadastrar(CadastroDto cadastroDto);
+        Task<Response<CadastroDto>> Cadastrar(CadastroDto cadastroDto, CancellationToken cancellationToken);
     }
 }

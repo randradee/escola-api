@@ -2,12 +2,5 @@
 
 namespace EscolaApi.Domain.Dtos
 {
-    public record CadastroDto
-        (
-            string Login,
-            string Senha,
-            ECargo Cargo
-        )
-    {
-    };
+    public record CadastroDto(string Login, string Senha, string Cargo);
 }

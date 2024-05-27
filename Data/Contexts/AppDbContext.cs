@@ -1,4 +1,5 @@
-﻿using EscolaApi.Domain.Models;
+﻿using EscolaApi.Data.Mappings;
+using EscolaApi.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EscolaApi.Data.Contexts
@@ -11,7 +12,7 @@ namespace EscolaApi.Data.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            modelBuilder.ApplyConfiguration(new UsuarioMapping());
         }
     }
 }

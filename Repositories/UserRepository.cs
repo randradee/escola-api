@@ -8,13 +8,13 @@ namespace EscolaApi.Repositories
 {
     public class UserRepository(AppDbContext context) : BaseRepository(context), IUserRepository
     {
-        public async Task<Usuario> GetUsuario(string login)
+        public async Task<Usuario?> GetUsuario(string login)
         {
             Usuario? result = await _context.Usuarios
                  .Where(x => x.Login == login)
                  .FirstOrDefaultAsync();
 
-            return result == null ? throw new Exception("Usuário não encontrado") : result;
+            return result;
         }
 
         public async Task CreateUsuario(Usuario usuario)

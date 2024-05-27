@@ -18,12 +18,12 @@ namespace EscolaApi.Controllers
         [HttpPost("/login")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            var result = await _userService.Login(loginDto.Login, loginDto.Senha);
+            var result = await _userService.Login(loginDto, cancellationToken);
 
             if (!result.Success)
                 return Unauthorized(result.Message);
@@ -34,12 +34,12 @@ namespace EscolaApi.Controllers
         [HttpPost("/cadastro")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Cadastrar([FromBody] CadastroDto cadastroDto)
+        public async Task<IActionResult> Cadastrar([FromBody] CadastroDto cadastroDto, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            var result = await _userService.Cadastrar(cadastroDto);
+            var result = await _userService.Cadastrar(cadastroDto, cancellationToken);
 
             if (!result.Success)
                 return BadRequest(result.Message);

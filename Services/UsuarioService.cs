@@ -8,39 +8,69 @@ using EscolaApi.Domain.Services.Communication;
 
 namespace EscolaApi.Services
 {
-    public class UsuarioService(IUserRepository userRepository, ITokenService tokenService, IUnitOfWork unitOfWork) : IUsuarioService
+    public class UsuarioService : IUsuarioService
     {
-        private readonly IUserRepository _userRepository = userRepository;
-        private readonly ITokenService _tokenService = tokenService;
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IUserRepository _userRepository;
+        private readonly ITokenService _tokenService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IConfiguration _configuration;
+        private readonly string _pepper;
+        private readonly int _iteration;
 
-        public async Task<Response<LoginResponseDto>> Login(string login, string senha)
+        public UsuarioService(IUserRepository userRepository, ITokenService tokenService, IUnitOfWork unitOfWork, IConfiguration configuration)
         {
-            Usuario usuario = await _userRepository.GetUsuario(login);
+            _userRepository = userRepository;
+            _tokenService = tokenService;
+            _unitOfWork = unitOfWork;
+            _configuration = configuration;
+            _pepper = _configuration["Pepper"]!;
+            _iteration = 3;
+        }
 
+        public async Task<Response<UsuarioDto>> Login(LoginDto loginDto, CancellationToken cancellationToken)
+        {
             try
             {
-                if(string.Equals(usuario.Login, login, StringComparison.CurrentCultureIgnoreCase) && string.Equals(usuario.Senha, senha, StringComparison.CurrentCultureIgnoreCase))
+                Usuario usuario = await _userRepository.GetUsuario(loginDto.Login);
+
+                if (usuario == null) return new Response<UsuarioDto>("Usuário ou senha incorreto(s)");
+
+                var passwordHash = PasswordHasher.ComputeHash(loginDto.Senha, usuario.SenhaSalt!, _pepper, _iteration);
+
+                if(passwordHash != usuario.SenhaHash)
                 {
-                    string token = await _tokenService.GenerateToken(usuario);
-
-                    return new Response<LoginResponseDto>(new LoginResponseDto(login, token));
+                    return new Response<UsuarioDto>("Usuário ou senha incorreto(s)");
                 }
+              
+                string token = await _tokenService.GenerateToken(usuario);
 
-                return new Response<LoginResponseDto>("Usuário ou senha incorreto(s)");
+                return new Response<UsuarioDto>(new UsuarioDto(loginDto.Login, token));
             }
             catch (Exception ex)
             {
-                return new Response<LoginResponseDto>($"erro: {ex.Message}");
+                return new Response<UsuarioDto>($"erro: {ex.Message}");
             }
         }
 
-        public async Task<Response<CadastroDto>> Cadastrar(CadastroDto cadastroDto)
+        public async Task<Response<CadastroDto>> Cadastrar(CadastroDto cadastroDto, CancellationToken cancellationToken)
         {
-            var usuario = new Usuario(new Guid(), cadastroDto.Login, cadastroDto.Senha, ECargo.ADMIN);
+            var usuario = new Usuario
+            {
+                Login = cadastroDto.Login,
+                SenhaSalt = PasswordHasher.GenerateSalt(),
+                Cargo = Enum.Parse<ECargo>(cadastroDto.Cargo)
+            };
+            usuario.SenhaHash = PasswordHasher.ComputeHash(cadastroDto.Senha, usuario.SenhaSalt, _pepper, _iteration);
 
             try
             {
+                Usuario? alreadyExists = await _userRepository.GetUsuario(cadastroDto.Login);
+
+                if (alreadyExists != null)
+                {
+                    return new Response<CadastroDto>("Já existe um usuário com esse nome");
+                }
+
                 await _userRepository.CreateUsuario(usuario);
                 await _unitOfWork.CompleteAsync();
 
@@ -50,8 +80,6 @@ namespace EscolaApi.Services
             {
                 return new Response<CadastroDto>($"erro: {ex.Message}");
             }
-
-
         }
     }
 }

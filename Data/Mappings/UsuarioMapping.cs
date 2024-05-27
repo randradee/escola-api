@@ -10,7 +10,8 @@ namespace EscolaApi.Data.Mappings
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Login).IsRequired();
-            builder.Property(x => x.Senha).IsRequired();
+            builder.Property(x => x.SenhaHash).IsRequired();
+            builder.Property(x => x.SenhaSalt).IsRequired();
             builder.Property(x => x.Cargo).IsRequired().HasConversion<string>();
         }
     }
