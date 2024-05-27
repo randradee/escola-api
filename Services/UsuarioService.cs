@@ -1,7 +1,7 @@
 ﻿using EscolaApi.Data.Repositories;
 using EscolaApi.Domain.Dtos;
 using EscolaApi.Domain.Enums;
-using EscolaApi.Domain.Models;
+using EscolaApi.Domain.Entities;
 using EscolaApi.Domain.Repositories;
 using EscolaApi.Domain.Services;
 using EscolaApi.Domain.Services.Communication;
@@ -31,7 +31,7 @@ namespace EscolaApi.Services
         {
             try
             {
-                Usuario usuario = await _userRepository.GetUsuario(loginDto.Login);
+                Usuario? usuario = await _userRepository.GetUsuario(loginDto.Login);
 
                 if (usuario == null) return new Response<UsuarioDto>("Usuário ou senha incorreto(s)");
 

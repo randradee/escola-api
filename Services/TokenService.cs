@@ -1,4 +1,4 @@
-﻿using EscolaApi.Domain.Models;
+﻿using EscolaApi.Domain.Entities;
 using EscolaApi.Domain.Services;
 using EscolaApi.Extensions;
 using Microsoft.IdentityModel.Tokens;

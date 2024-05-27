@@ -1,6 +1,6 @@
 ﻿using EscolaApi.Data.Contexts;
 using EscolaApi.Data.Repositories;
-using EscolaApi.Domain.Models;
+using EscolaApi.Domain.Entities;
 using EscolaApi.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 

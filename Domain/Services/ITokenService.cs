@@ -1,4 +1,4 @@
-﻿using EscolaApi.Domain.Models;
+﻿using EscolaApi.Domain.Entities;
 
 namespace EscolaApi.Domain.Services
 {
