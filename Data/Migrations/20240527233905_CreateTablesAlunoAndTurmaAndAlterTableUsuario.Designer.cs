@@ -3,6 +3,7 @@ using System;
 using EscolaApi.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EscolaApi.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240527233905_CreateTablesAlunoAndTurmaAndAlterTableUsuario")]
+    partial class CreateTablesAlunoAndTurmaAndAlterTableUsuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace EscolaApi.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("AlunoTurma", b =>
+                {
+                    b.Property<Guid>("AlunosId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TurmasId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("AlunosId", "TurmasId");
+
+                    b.HasIndex("TurmasId");
+
+                    b.ToTable("AlunoTurma");
+                });
 
             modelBuilder.Entity("EscolaApi.Domain.Entities.Aluno", b =>
                 {
@@ -88,33 +106,6 @@ namespace EscolaApi.Data.Migrations
                     b.ToTable("Turmas");
                 });
 
-            modelBuilder.Entity("EscolaApi.Domain.Entities.TurmaAluno", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AlunoId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("TurmaId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlunoId");
-
-                    b.HasIndex("TurmaId");
-
-                    b.ToTable("TurmaAluno");
-                });
-
             modelBuilder.Entity("EscolaApi.Domain.Entities.Usuario", b =>
                 {
                     b.Property<Guid>("Id")
@@ -152,17 +143,17 @@ namespace EscolaApi.Data.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("EscolaApi.Domain.Entities.TurmaAluno", b =>
+            modelBuilder.Entity("AlunoTurma", b =>
                 {
                     b.HasOne("EscolaApi.Domain.Entities.Aluno", null)
                         .WithMany()
-                        .HasForeignKey("AlunoId")
+                        .HasForeignKey("AlunosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EscolaApi.Domain.Entities.Turma", null)
                         .WithMany()
-                        .HasForeignKey("TurmaId")
+                        .HasForeignKey("TurmasId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
