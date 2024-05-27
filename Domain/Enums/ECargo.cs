@@ -8,7 +8,12 @@ namespace EscolaApi.Domain.Enums
         ADMIN,
 
         [Description("Gestor Escolar")]
-        GE
+        GE,
 
+        [Description("Professor")]
+        PROFESSOR,
+
+        [Description("Aluno")]
+        ALUNO,
     }
 }
