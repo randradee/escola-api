@@ -1,10 +1,10 @@
 ﻿using EscolaApi.Data.Repositories;
-using EscolaApi.Domain.Dtos;
 using EscolaApi.Domain.Enums;
 using EscolaApi.Domain.Entities;
 using EscolaApi.Domain.Repositories;
 using EscolaApi.Domain.Services;
 using EscolaApi.Domain.Services.Communication;
+using EscolaApi.Domain.Dtos.Auth;
 
 namespace EscolaApi.Services
 {

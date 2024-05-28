@@ -20,4 +20,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\Dtos\Aluno\" />
+    <Folder Include="Domain\Dtos\Turma\" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,4 @@
-﻿using EscolaApi.Domain.Dtos;
+﻿using EscolaApi.Domain.Dtos.Auth;
 using EscolaApi.Domain.Services.Communication;
 
 namespace EscolaApi.Domain.Services

@@ -1,4 +1,4 @@
-﻿using EscolaApi.Domain.Dtos;
+﻿using EscolaApi.Domain.Dtos.Auth;
 using EscolaApi.Domain.Services;
 using EscolaApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
