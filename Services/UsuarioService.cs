@@ -1,10 +1,10 @@
 ﻿using EscolaApi.Data.Repositories;
-using EscolaApi.Domain.Enums;
+using EscolaApi.Domain.Dtos.Auth;
 using EscolaApi.Domain.Entities;
+using EscolaApi.Domain.Enums;
 using EscolaApi.Domain.Repositories;
 using EscolaApi.Domain.Services;
 using EscolaApi.Domain.Services.Communication;
-using EscolaApi.Domain.Dtos.Auth;
 
 namespace EscolaApi.Services
 {
@@ -37,11 +37,11 @@ namespace EscolaApi.Services
 
                 var passwordHash = PasswordHasher.ComputeHash(loginDto.Senha, usuario.SenhaSalt!, _pepper, _iteration);
 
-                if(passwordHash != usuario.SenhaHash)
+                if (passwordHash != usuario.SenhaHash)
                 {
                     return new Response<UsuarioDto>("Usuário ou senha incorreto(s)");
                 }
-              
+
                 string token = await _tokenService.GenerateToken(usuario);
 
                 return new Response<UsuarioDto>(new UsuarioDto(loginDto.Login, token));

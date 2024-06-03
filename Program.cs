@@ -2,12 +2,13 @@ using EscolaApi.Data.Contexts;
 using EscolaApi.Data.Repositories;
 using EscolaApi.Domain.Repositories;
 using EscolaApi.Domain.Services;
+using EscolaApi.Mapping;
 using EscolaApi.Repositories;
 using EscolaApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,13 +53,19 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Automapper
+builder.Services.AddAutoMapper(typeof(AlunoMappingProfile));
 
 
 // Injeções de dependência
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
+
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAlunoService, AlunoService>();
 
 
 builder.Services.AddAuthentication(options =>
