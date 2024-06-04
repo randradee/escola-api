@@ -13,11 +13,15 @@ namespace EscolaApi.Mapping
             CreateMap<DateTime, string>().ConvertUsing<DateTimeToStringConverter>();
 
             CreateMap<Aluno, GetAlunoDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.IsAtivo, opt => opt.MapFrom(src => src.Ativo))
+                .ForMember(dest => dest.Nome, opt => opt.Condition(src => src.Nome != null))
                 .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.Nome))
+                .ForMember(dest => dest.Sobrenome, opt => opt.Condition(src => src.Sobrenome != null))
                 .ForMember(dest => dest.Sobrenome, opt => opt.MapFrom(src => src.Sobrenome))
+                .ForMember(dest => dest.Email, opt => opt.Condition(src => src.Email != null))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dest => dest.DataNascimento, opt => opt.MapFrom(src => src.DataNascimento))
+                .ForMember(dest => dest.DataNascimento, opt => opt.MapFrom(src => src.DataNascimento.ToString("dd/MM/yyyy")))
                 .ForMember(dest => dest.Turmas, opt => opt.Condition(src => src.Turmas != null))
                 .ForMember(dest => dest.Turmas, opt => opt.MapFrom(src => src.Turmas));
 

@@ -33,12 +33,17 @@ namespace EscolaApi.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [Route("{id}")]
-        public async Task<IActionResult> GetAluno([FromRoute] Guid id)
+        public async Task<IActionResult> GetAlunoById([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            var result = await _alunoService.GetAluno(id);
+            var result = await _alunoService.GetAlunoById(id);
+
+            if(!result.Success)
+                return NotFound(result.Message);
+
+            return Ok(result.Resource);
         }
     }
 }

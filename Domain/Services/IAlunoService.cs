@@ -6,6 +6,6 @@ namespace EscolaApi.Domain.Services
     public interface IAlunoService
     {
         Task<Response<CreateAlunoDto>> CreateAluno(CreateAlunoDto createAlunoDto);
-        Task<Response<GetAlunoDto>> GetAluno(string nome);
+        Task<Response<GetAlunoDto>> GetAlunoById(Guid id);
     }
 }

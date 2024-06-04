@@ -19,7 +19,7 @@ namespace EscolaApi.Services
             Aluno aluno = _mapper.Map<CreateAlunoDto, Aluno>(createAlunoDto);
             aluno.DataCriacao = DateTime.UtcNow;
 
-            Aluno? storedAluno = await _alunoRepository.GetAlunoByName(createAlunoDto.Nome);
+            //Aluno? storedAluno = await _alunoRepository.GetAlunoByName(createAlunoDto.Nome);
 
             //if (storedAluno != null
             //    && string.Equals(createAlunoDto.Nome, storedAluno.Nome, StringComparison.CurrentCultureIgnoreCase)
@@ -44,9 +44,9 @@ namespace EscolaApi.Services
 
         }
 
-        public async Task<Response<GetAlunoDto>> GetAluno(string nome)
+        public async Task<Response<GetAlunoDto>> GetAlunoById(Guid id)
         {
-            Aluno? aluno = await _alunoRepository.GetAlunoByName(nome);
+            Aluno? aluno = await _alunoRepository.GetAlunoById(id);
 
             if(aluno == null)
             {

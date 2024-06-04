@@ -12,9 +12,9 @@ namespace EscolaApi.Repositories
             await _context.Alunos.AddAsync(aluno);
         }
 
-        public async Task<Aluno?> GetAlunoByName(string nome)
+        public async Task<Aluno?> GetAlunoById(Guid id)
         {
-            return await _context.Alunos.FindAsync(nome);
+            return await _context.Alunos.FindAsync(id);
         }
     }
 }
