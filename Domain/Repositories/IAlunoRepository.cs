@@ -6,5 +6,6 @@ namespace EscolaApi.Domain.Repositories
     {
         Task<Aluno?> GetAlunoById(Guid id);
         Task CreateAluno(Aluno aluno);
+        Task<Aluno?> GetAlunoByUniqueness(string nome, string sobrenome, string email);
     }
 }

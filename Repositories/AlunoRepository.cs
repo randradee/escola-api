@@ -2,6 +2,7 @@
 using EscolaApi.Data.Repositories;
 using EscolaApi.Domain.Entities;
 using EscolaApi.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace EscolaApi.Repositories
 {
@@ -15,6 +16,11 @@ namespace EscolaApi.Repositories
         public async Task<Aluno?> GetAlunoById(Guid id)
         {
             return await _context.Alunos.FindAsync(id);
+        }
+
+        public async Task<Aluno?> GetAlunoByUniqueness(string nome, string sobrenome, string email)
+        {
+            return await _context.Alunos.FirstOrDefaultAsync(x => x.Nome == nome && x.Sobrenome == sobrenome && x.Email == email);
         }
     }
 }

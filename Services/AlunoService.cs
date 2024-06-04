@@ -5,6 +5,7 @@ using EscolaApi.Domain.Entities;
 using EscolaApi.Domain.Repositories;
 using EscolaApi.Domain.Services;
 using EscolaApi.Domain.Services.Communication;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EscolaApi.Services
 {
@@ -19,16 +20,12 @@ namespace EscolaApi.Services
             Aluno aluno = _mapper.Map<CreateAlunoDto, Aluno>(createAlunoDto);
             aluno.DataCriacao = DateTime.UtcNow;
 
-            //Aluno? storedAluno = await _alunoRepository.GetAlunoByName(createAlunoDto.Nome);
+            Aluno? storedAluno = await _alunoRepository.GetAlunoByUniqueness(createAlunoDto.Nome, createAlunoDto.Sobrenome, createAlunoDto.Email);
 
-            //if (storedAluno != null
-            //    && string.Equals(createAlunoDto.Nome, storedAluno.Nome, StringComparison.CurrentCultureIgnoreCase)
-            //    && string.Equals(createAlunoDto.Sobrenome, storedAluno.Sobrenome, StringComparison.CurrentCultureIgnoreCase)
-            //    && string.Equals(createAlunoDto.Email, storedAluno.Email, StringComparison.CurrentCultureIgnoreCase)
-            //    )
-            //{
-            //    return new Response<CreateAlunoDto>("Já existe no sistema um aluno com as características informadas");
-            //}
+            if (storedAluno != null)
+            {
+                return new Response<CreateAlunoDto>("Já existe no sistema um aluno com as características informadas");
+            }
 
             try
             {
